@@ -1,0 +1,17 @@
+<h2>TODO: {{ title }}</h2>
+
+{{# each items }}
+  <div>{{ this }}</div>
+{{/each}}
+
+<form method="GET">
+  {{# each items }}
+    <input type="hidden" value="{{ this }}" name="item">
+  {{/each}}
+
+  <label for="item-to-add">Add a new item:</label>
+  <input id="item-to-add" type="text" name="item">
+
+  <button type="submit">Add</button>
+
+</form>
