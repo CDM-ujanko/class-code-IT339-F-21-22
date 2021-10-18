@@ -1,8 +1,9 @@
 import express from 'express'
-import {InMemoryNotesStore} from '../models/notes-memory.mjs';
+// import {InMemoryNotesStore} from '../models/notes-memory.mjs';
+import {FSNotesStore} from '../models/notes-fs.mjs';
 
 const router = express.Router();
-let notes = new InMemoryNotesStore();
+let notes = new FSNotesStore();
 
 /* GET home page. */
 router.get('/', async(req, resp, next) => {

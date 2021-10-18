@@ -28,6 +28,30 @@ class Note {
   set body(body) {
     this.#body = body;
   }
+
+  get JSON() {
+    return JSON.stringify({
+      key: this.#key,
+      title: this.#title,
+      body: this.#body
+    })
+  }
+
+  set JSON(json) {
+    const data = JSON.parse(json);
+
+    if (typeof data !== 'object' ||
+        !data.hasOwnProperty('key') ||
+        !data.hasOwnProperty('title') ||
+        !data.hasOwnProperty('body') ||
+        typeof data.key !== 'string' ||
+        typeof data.title !== 'string' ||
+        typeof data.body !== 'string') {
+      throw new Error(`Not a valid note: ${json}`);
+    }
+
+    return new Note(data.key, data.title, data.body);
+  }
 }
 
 class AbstractNotesStore {
