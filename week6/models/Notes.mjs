@@ -34,7 +34,7 @@ class Note {
       key: this.#key,
       title: this.#title,
       body: this.#body
-    })
+    }, null, 2)
   }
 
   set JSON(json) {
@@ -51,6 +51,10 @@ class Note {
     }
 
     return new Note(data.key, data.title, data.body);
+  }
+
+  toJSON() {
+    return this.JSON;
   }
 }
 

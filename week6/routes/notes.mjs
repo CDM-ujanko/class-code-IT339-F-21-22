@@ -1,9 +1,9 @@
 import express from 'express'
 // import {InMemoryNotesStore} from '../models/notes-memory.mjs';
-import {FSNotesStore} from '../models/notes-fs.mjs';
+import {SQLiteNotesStore} from '../models/notes-sqlite.mjs';
 
 const router = express.Router();
-let notes = new FSNotesStore();
+let notes = new SQLiteNotesStore();
 
 /* GET home page. */
 router.get('/', async(req, resp, next) => {
