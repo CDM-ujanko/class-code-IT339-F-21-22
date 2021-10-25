@@ -1,0 +1,10 @@
+<h1>{{title}}</h1>
+
+<ul>
+  {{# each noteKeys }}
+    <li>
+      <a href="/notes/edit/{{this}}">{{ this }}</a>
+      <a href="/notes/delete/{{this}}">Delete</a>
+    </li>
+  {{/each}}
+</ul>
