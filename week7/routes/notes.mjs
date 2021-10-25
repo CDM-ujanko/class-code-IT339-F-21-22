@@ -1,59 +1,78 @@
 import express from 'express'
 // import {InMemoryNotesStore} from '../models/notes-memory.mjs';
-import {SQLiteNotesStore} from '../models/notes-sqlite.mjs';
+// import {SQLiteNotesStore} from '../models/notes-sqlite.mjs';
+import {MongoDBNotesStore} from '../models/notes-mongodb.mjs';
 
 const router = express.Router();
-let notes = new SQLiteNotesStore();
+let notes = new MongoDBNotesStore();
 
 /* GET home page. */
-router.get('/', async(req, resp, next) => {
-  resp.render('notes', {
-    title: 'My Notes',
-    noteKeys: await notes.keyList()
-  });
+router.get('/', async (req, resp, next) => {
+  try {
+    let keys = await notes.keyList();
+
+    resp.render('notes', {
+      title: 'My Notes',
+      notes: await Promise.all(keys.map(key => notes.read(key)))
+    });
+  } catch (e) {
+    next(e);
+  }
 });
 
 router.get('/add', async (req, resp, next) => {
-  if (req.query.key && req.query.title && req.query.body) {
-    await notes.create(req.query.key, req.query.title, req.query.body);
-    resp.redirect('/notes');
-  } else {
-    resp.render('edit-note', {
-      title: 'Create Note'
-    });
+  try {
+    if (req.query.key && req.query.title && req.query.body) {
+      await notes.create(req.query.key, req.query.title, req.query.body);
+      resp.redirect('/notes');
+    } else {
+      resp.render('edit-note', {
+        title: 'Create Note'
+      });
+    }
+  } catch (e) {
+    next(e);
   }
 });
 
 router.get('/edit/:key', async (req, resp, next) => {
-  let note = await notes.read(req.params.key);
+  try {
+    let note = await notes.read(req.params.key);
 
-  if (!note) {
-    next(new Error(`No such key ${req.params.key}`));
-    return;
-  }
+    if (!note) {
+      next(new Error(`No such key ${req.params.key}`));
+      return;
+    }
 
-  if (req.query.title && req.query.body) {
-    await notes.update(note.key, req.query.title, req.query.body);
-    resp.redirect('/notes');
-  } else {
-    resp.render('edit-note', {
-      title: 'Edit Note',
-      note: note,
-      edit: true
-    });
+    if (req.query.title && req.query.body) {
+      await notes.update(note.key, req.query.title, req.query.body);
+      resp.redirect('/notes');
+    } else {
+      resp.render('edit-note', {
+        title: 'Edit Note',
+        note: note,
+        edit: true
+      });
+    }
+  } catch (e) {
+    next(e);
   }
 });
 
 router.get('/delete/:key', async (req, resp, next) => {
-  let note = await notes.read(req.params.key);
+  try {
+    let note = await notes.read(req.params.key);
 
-  if (!note) {
-    next(new Error(`No such key ${req.params.key}`));
-    return;
+    if (!note) {
+      next(new Error(`No such key ${req.params.key}`));
+      return;
+    }
+
+    await notes.destroy(note.key);
+    resp.redirect('/notes');
+  } catch (e) {
+    next(e);
   }
-
-  await notes.destroy(note.key);
-  resp.redirect('/notes');
 });
 
 export default router;

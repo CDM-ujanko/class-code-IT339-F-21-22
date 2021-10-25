@@ -1,10 +1,10 @@
 <h1>{{title}}</h1>
 
 <ul>
-  {{# each noteKeys }}
+  {{# each notes }}
     <li>
-      <a href="/notes/edit/{{this}}">{{ this }}</a>
-      <a href="/notes/delete/{{this}}">Delete</a>
+      <a href="/notes/edit/{{key}}">{{ title }}</a>
+      <a href="/notes/delete/{{key}}">Delete</a>
     </li>
   {{/each}}
 </ul>
