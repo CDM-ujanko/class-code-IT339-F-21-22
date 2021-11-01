@@ -56,6 +56,21 @@ app.del('/user/:username', async (req, resp, next) => {
   }
 });
 
+app.post('/user/check/:username', async (req, resp, next) => {
+  let username = req.params.username;
+  let user = await User.get(username);
+
+  if (!user) {
+    resp.send(`Invalid username/password!`);
+  } else {
+    if (await User.check(username, req.body.password)) {
+      resp.send(user);
+    } else {
+      resp.send(`Invalid username/password!`);
+    }
+  }
+});
+
 let apiKeys = [
   {user: 'admin', key: 'D4ED43C0-8BD6-4FE2-B358-7C0E230D11EF'}
 ];
