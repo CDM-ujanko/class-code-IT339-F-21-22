@@ -2,6 +2,7 @@ import express from 'express'
 // import {InMemoryNotesStore} from '../models/notes-memory.mjs';
 // import {SQLiteNotesStore} from '../models/notes-sqlite.mjs';
 import {MongoDBNotesStore} from '../models/notes-mongodb.mjs';
+import {authenticate} from './users.mjs';
 
 const router = express.Router();
 let notes = new MongoDBNotesStore();
@@ -20,7 +21,7 @@ router.get('/', async (req, resp, next) => {
   }
 });
 
-router.get('/add', async (req, resp, next) => {
+router.get('/add', authenticate, async (req, resp, next) => {
   try {
     if (req.query.key && req.query.title && req.query.body) {
       await notes.create(req.query.key, req.query.title, req.query.body);
@@ -35,7 +36,7 @@ router.get('/add', async (req, resp, next) => {
   }
 });
 
-router.get('/edit/:key', async (req, resp, next) => {
+router.get('/edit/:key', authenticate, async (req, resp, next) => {
   try {
     let note = await notes.read(req.params.key);
 

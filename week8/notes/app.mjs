@@ -1,6 +1,8 @@
-// var createError = require('http-errors');
 import createError from 'http-errors';
 import express from 'express'
+import bodyParser from 'body-parser';
+import session from 'express-session';
+
 import hbs from 'hbs';
 import * as path from 'path';
 import cookieParser from 'cookie-parser';
@@ -9,6 +11,7 @@ import logger from 'morgan';
 // Routes
 import indexRouter from './routes/index.mjs';
 import notesRouter from './routes/notes.mjs';
+import {initPassport, router as usersRouter} from './routes/users.mjs';
 
 const __dirname = path.resolve();
 const app = express();
@@ -19,12 +22,25 @@ app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname, 'partials'));
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(session({
+  secret: 'keyboard mouse',
+  resave: true,
+  saveUninitialized: true,
+  name: 'notescookie'
+}))
+
+initPassport(app);
+
 app.use('/', indexRouter);
+app.use('/', usersRouter);
 app.use('/notes', notesRouter);
 
 // catch 404 and forward to error handler
