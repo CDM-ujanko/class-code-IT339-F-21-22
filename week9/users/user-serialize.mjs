@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import {reject, use} from 'bcrypt/promises.js';
 
 await mongoose.connect(`mongodb://127.0.0.1:27017/it339-notes`);
 
@@ -93,10 +92,6 @@ class User {
   async check (username, password) {
     let user = await this.get(username);
 
-    console.log('user', user);
-    console.log('username', username);
-    console.log('password', password);
-
     if (!user) {
       return false;
     }
@@ -107,10 +102,13 @@ class User {
           return reject(err);
         }
 
-        console.log('result in bcrypt', result);
         return resolve(result);
       })
     })
+  }
+
+  close() {
+    mongoose.disconnect();
   }
 }
 
