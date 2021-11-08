@@ -1,0 +1,42 @@
+<div class="container">
+<form method="GET">
+  <div class="mb-3">
+    <label for="note-key" class="form-label">Key</label>
+    <input type="text"
+        class="form-control"
+        id="note-key"
+        name="key"
+        {{# if edit}}
+        disabled
+        value="{{note.key}}"
+        {{/if}} >
+  </div>
+
+  <div class="mb-3">
+    <label for="note-title" class="form-label">Title</label>
+    <input type="text"
+        class="form-control"
+        id="note-title"
+        name="title"
+        value="{{note.title}}">
+  </div>
+
+  <div class="mb-3">
+    <label for="note-body" class="form-label">Body</label>
+    <textarea class="form-control"
+        id="note-body"
+        rows="3"
+        name="body">{{note.body}}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary mb-3">
+    {{#if edit}}
+      Save
+    {{else}}
+        Create
+    {{/if}}
+    </button>
+</form>
+</div>
+
+
