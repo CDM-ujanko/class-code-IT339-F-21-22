@@ -3,12 +3,15 @@ import mongodb from 'mongodb';
 
 const MongoClient = mongodb.MongoClient;
 
+let host = process.env.MONGODB_HOST,
+    port = process.env.MONGODB_PORT;
+
 const db = await (async () => {
-  let client = await MongoClient.connect('mongodb://localhost:27017');
-  return client.db('it339-notes');
+  let client = await MongoClient.connect(`mongodb://${host}:${port}`);
+  return client.db(process.env.MONGODB_DATABASE);
 })();
 
-const notes = db.collection('notes');
+const notes = db.collection(process.env.MONGODB_COLLECTION);
 
 class MongoDBNotesStore extends AbstractNotesStore {
   async create (key, title, body) {

@@ -6,16 +6,16 @@ const app = restify.createServer({
   version: '0.0.1'
 });
 
-app.listen(4000, 'localhost', () => {
+app.listen(process.env.PORT, () => {
   console.log(`${app.name} listening on ${app.url}`);
 });
 
-app.use(restify.plugins.authorizationParser())
-app.use(authorize)
-app.use(restify.plugins.queryParser())
+app.use(restify.plugins.authorizationParser());
+app.use(authorize);
+app.use(restify.plugins.queryParser());
 app.use(restify.plugins.bodyParser({
   mapParams: true
-}))
+}));
 
 app.get('/users', async (req, resp, next) => {
   let users = await User.list();
@@ -72,7 +72,9 @@ app.post('/user/check/:username', async (req, resp, next) => {
 });
 
 let apiKeys = [
-  {user: 'admin', key: 'D4ED43C0-8BD6-4FE2-B358-7C0E230D11EF'}
+  {
+    user: process.env.USER_SERVICE_USER,
+    key: process.env.USER_SERVICE_KEY}
 ];
 
 function authorize(req, resp, next) {
@@ -81,8 +83,8 @@ function authorize(req, resp, next) {
     for (let auth of apiKeys) {
       if (auth.key === req.authorization.basic.password &&
           auth.user === req.authorization.basic.username) {
-          found = true;
-          break
+        found = true;
+        break
       }
     }
 

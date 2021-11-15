@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const apiUser = 'admin';
-const key = 'D4ED43C0-8BD6-4FE2-B358-7C0E230D11EF';
+const apiUser = process.env.USER_SERVICE_USER;
+const key = process.env.USER_SERVICE_KEY;
 
 export async function check(username, password) {
-  return axios.post('http://localhost:4000/user/check/' + username, {
+  return axios.post(`${process.env.USER_SERVICE_URL}/user/check/` + username, {
     username: username,
     password: password
   }, {
@@ -16,7 +16,7 @@ export async function check(username, password) {
 }
 
 export async function find(username) {
-  return axios.get('http://localhost:4000/user/' + username, {
+  return axios.get(`${process.env.USER_SERVICE_URL}/user/` + username, {
     auth: {
       username: apiUser,
       password: key

@@ -1,10 +1,13 @@
 <h1>{{title}}</h1>
 
-<ul>
+<div class="list-group">
   {{# each notes }}
-    <li>
-      <a href="/notes/edit/{{key}}">{{ title }}</a>
-      <a href="/notes/delete/{{key}}">Delete</a>
-    </li>
+    <div class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <a href="/notes/edit/{{key}}" class="mb-1">{{title}}</a>
+        <small><a href="/notes/delete/{{key}}">Delete</a></small>
+      </div>
+      <p class="mb-1">{{body}}</p>
+    </div>
   {{/each}}
-</ul>
+</div>

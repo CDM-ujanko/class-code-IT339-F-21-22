@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=notes:* node ./index.mjs"
+    "start": "DEBUG=notes:* nodemon ./index.mjs"
   },
   "dependencies": {
     "axios": "^0.24.0",
@@ -19,5 +19,8 @@
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",
     "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

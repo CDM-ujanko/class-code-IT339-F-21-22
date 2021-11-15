@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27018:27017'
+    volumes:
+      - ./docker-config/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  notes:
+    build:
+      dockerfile: ./docker-config/notes/Dockerfile
+      context: .
+    expose:
+      - 3000
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - ./notes:/app
+    env_file: ./notes/.env
+  users:
+    build:
+      dockerfile: ./docker-config/users/Dockerfile
+      context: .
+    expose:
+      - 4000
+    ports:
+      - '4000:4000'
+    volumes:
+      - /app/node_modules
+      - ./users:/app
+    env_file: ./users/.env

@@ -1,7 +1,13 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-await mongoose.connect(`mongodb://127.0.0.1:27017/it339-notes`);
+let host = process.env.MONGODB_HOST,
+    port = process.env.MONGODB_PORT,
+    db = process.env.MONGODB_DATABASE;
+
+(async () => {
+  await mongoose.connect(`mongodb://${host}:${port}/${db}`);
+})();
 
 const Schema = mongoose.Schema;
 

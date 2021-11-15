@@ -39,6 +39,13 @@ app.use(session({
 
 initPassport(app);
 
+app.use((req, res, next) => {
+  if (req.user) {
+    res.locals.user = req.user;
+  }
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/notes', notesRouter);
